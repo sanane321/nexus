@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+:root {
+  --color-brand-accent: #c084fc;
+  --color-brand-bg: #0f172a;
+  --color-brand-panel: rgba(30, 41, 59, 0.8);
+  --color-brand-border: rgba(255, 255, 255, 0.1);
+  --color-brand-text: #cbd5e1;
+  --color-chart-line: #c084fc;
+  --color-chart-line-subtle: rgba(255, 255, 255, 0.1);
+  --color-chart-grid: rgba(255, 255, 255, 0.05);
+  --color-chart-axis: rgba(255, 255, 255, 0.3);
+  --color-tooltip-bg: rgba(30, 41, 59, 0.95);
+  --color-tooltip-border: rgba(255, 255, 255, 0.15);
+  --shadow-glow: 0 0 25px rgba(192, 132, 252, 0.2);
+}
+
+.light {
+  --color-brand-accent: #7c3aed;
+  --color-brand-bg: #94a3b8;
+  --color-brand-panel: #cbd5e1;
+  --color-brand-border: rgba(30, 41, 59, 0.15);
+  --color-brand-text: #0f172a;
+  --color-chart-line: #7c3aed;
+  --color-chart-line-subtle: rgba(124, 58, 237, 0.1);
+  --color-chart-grid: rgba(30, 41, 59, 0.05);
+  --color-chart-axis: rgba(30, 41, 59, 0.4);
+  --color-tooltip-bg: #ffffff;
+  --color-tooltip-border: rgba(30, 41, 59, 0.1);
+  --shadow-glow: 0 4px 20px rgba(124, 58, 237, 0.15);
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-brand-accent: var(--color-brand-accent);
+  --color-brand-bg: var(--color-brand-bg);
+  --color-brand-panel: var(--color-brand-panel);
+  --color-brand-border: var(--color-brand-border);
+  
+  --shadow-glow: var(--shadow-glow);
+}
+
+body {
+  @apply font-sans bg-brand-bg text-slate-300 antialiased overflow-hidden h-screen text-lg leading-relaxed tracking-tight transition-colors duration-500;
+}
+
+.light body {
+  @apply text-slate-600;
+}
+
+.panel-bg {
+  @apply bg-brand-panel backdrop-blur-2xl border border-brand-border rounded-[2rem] shadow-xl;
+}
+
+.glass-header {
+  @apply bg-brand-bg/50 backdrop-blur-xl border-b border-brand-border;
+}
+
+.stat-card {
+  @apply bg-white/[0.03] backdrop-blur-md border border-white/[0.05] p-8 rounded-[2rem] transition-all hover:bg-white/[0.06] hover:border-brand-accent/30 hover:shadow-glow;
+}
+
+::selection {
+  background: var(--color-brand-accent);
+  color: black;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-accent);
+}
+

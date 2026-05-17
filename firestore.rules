@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Common Helpers
+    function isSystemOperator(ownerId) { return ownerId == 'nexus_default_operator'; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isValidId(id) { return id is string && id.size() <= 128; }
+
+    // Device Rules
+    match /devices/{deviceId} {
+      function isValidDevice(data) {
+        return data.name is string && data.name.size() < 100 &&
+               data.type in ['temperature', 'humidity', 'power', 'motion'] &&
+               data.status in ['online', 'offline', 'alert'] &&
+               isSystemOperator(data.ownerId);
+      }
+      allow list: if isSystemOperator(resource.data.ownerId);
+      allow get: if isSystemOperator(resource.data.ownerId);
+      allow create: if isValidDevice(incoming());
+      allow update: if isSystemOperator(existing().ownerId) && isValidDevice(incoming()) && (
+        incoming().diff(existing()).affectedKeys().hasOnly(['status', 'lastSeen', 'latestValues', 'metadata', 'name', 'assetId'])
+      );
+      allow delete: if isSystemOperator(existing().ownerId);
+    }
+
+    // Telemetry Rules (Immutable writes)
+    match /telemetry/{telemetryId} {
+      function isValidTelemetry(data) {
+        return data.deviceId is string && data.values is map;
+      }
+      // Access to telemetry depends on owning the device
+      function canAccessTelemetry(deviceId) {
+        return isSystemOperator(get(/databases/$(database)/documents/devices/$(deviceId)).data.ownerId);
+      }
+      allow list: if canAccessTelemetry(resource.data.deviceId);
+      allow get: if canAccessTelemetry(resource.data.deviceId);
+      allow create: if isValidTelemetry(incoming()) && canAccessTelemetry(incoming().deviceId);
+    }
+
+    // Alert Rules
+    match /alerts/{alertId} {
+      function isValidAlert(data) {
+        return data.deviceId is string && data.severity in ['critical', 'warning', 'info'] &&
+               isSystemOperator(data.ownerId);
+      }
+      allow list: if isSystemOperator(resource.data.ownerId);
+      allow get: if isSystemOperator(resource.data.ownerId);
+      allow create: if isValidAlert(incoming());
+      allow update: if isSystemOperator(existing().ownerId) && incoming().diff(existing()).affectedKeys().hasOnly(['resolved']);
+      allow delete: if isSystemOperator(existing().ownerId);
+    }
+
+    // Asset Rules
+    match /assets/{assetId} {
+      allow list: if isSystemOperator(resource.data.ownerId);
+      allow get: if isSystemOperator(resource.data.ownerId);
+      allow create: if isSystemOperator(incoming().ownerId);
+      allow update: if isSystemOperator(existing().ownerId) && isSystemOperator(incoming().ownerId);
+      allow delete: if isSystemOperator(existing().ownerId);
+    }
+  }
+}

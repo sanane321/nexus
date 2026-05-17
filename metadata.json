@@ -1,0 +1,8 @@
+{
+  "name": "Nexus IoT Platform",
+  "description": "Public industrial IoT dashboard for real-time telemetry monitoring, asset tracking, and network analysis. Accessible commanding interface with advanced visualization.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "entities": {
+    "Device": {
+      "title": "Device",
+      "description": "An IoT device representing a sensor or actuator",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["temperature", "humidity", "power", "motion"] },
+        "status": { "type": "string", "enum": ["online", "offline", "alert"] },
+        "lastSeen": { "type": "string", "format": "date-time" },
+        "ownerId": { "type": "string" },
+        "assetId": { "type": "string" },
+        "metadata": { "type": "object" },
+        "latestValues": { "type": "object" }
+      },
+      "required": ["name", "type", "ownerId", "status"]
+    },
+    "Telemetry": {
+      "title": "Telemetry",
+      "description": "Time-series data points from a device",
+      "type": "object",
+      "properties": {
+        "deviceId": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "values": { "type": "object" }
+      },
+      "required": ["deviceId", "timestamp", "values"]
+    },
+    "Alert": {
+      "title": "Alert",
+      "description": "Triggered events when thresholds are exceeded",
+      "type": "object",
+      "properties": {
+        "deviceId": { "type": "string" },
+        "severity": { "type": "string", "enum": ["critical", "warning", "info"] },
+        "message": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "resolved": { "type": "boolean" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["deviceId", "severity", "message", "timestamp", "ownerId"]
+    },
+    "Asset": {
+      "title": "Asset",
+      "description": "Logical group of devices (e.g., Room A, Factory Floor)",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "ownerId": { "type": "string" }
+      },
+      "required": ["name", "ownerId"]
+    }
+  },
+  "firestore": {
+    "devices": {
+      "schema": "Device",
+      "description": "List of IoT devices managed by users"
+    },
+    "telemetry": {
+      "schema": "Telemetry",
+      "description": "Real-time telemetry stream data"
+    },
+    "alerts": {
+      "schema": "Alert",
+      "description": "Alert history and active notifications"
+    },
+    "assets": {
+      "schema": "Asset",
+      "description": "User defined asset hierarchies"
+    }
+  }
+}
