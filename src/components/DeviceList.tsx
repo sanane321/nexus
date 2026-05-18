@@ -4,6 +4,7 @@ import { db, SYSTEM_USER_ID } from '../lib/firebase';
 import { Device, DeviceType } from '../types';
 import { Plus, Trash2, Cpu, Signal, SignalLow, SignalHigh, Info } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Helmet } from 'react-helmet-async';
 
 export function DeviceList() {
   const [devices, setDevices] = useState<Device[]>([]);
@@ -64,6 +65,10 @@ export function DeviceList() {
 
   return (
     <div className="p-10 max-w-7xl mx-auto space-y-16 bg-transparent h-full">
+      <Helmet>
+        <title>Nexus Node Fleet | Network Inventory</title>
+        <meta name="description" content="Manage and provision industrial IoT nodes. Global asset tracking with high-latency secure protocols." />
+      </Helmet>
       <div className="flex justify-between items-end">
         <div>
           <h2 className="text-6xl font-bold tracking-tight text-white light:text-slate-900 mb-2 uppercase leading-none transition-colors font-display">Node Fleet</h2>

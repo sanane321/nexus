@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import { Helmet } from 'react-helmet-async';
 import { 
   Mail, 
   Phone, 
@@ -66,6 +67,10 @@ export function ContactsView() {
 
   return (
     <div className="p-10 max-w-7xl mx-auto space-y-16 bg-transparent h-full transition-colors">
+      <Helmet>
+        <title>Nexus Comm Center | Secure Support</title>
+        <meta name="description" content="Direct secure-link high-priority channels to global Nexus operators and deep-infrastructure engineers." />
+      </Helmet>
       <header className="space-y-6">
         <div className="flex items-center gap-4 transition-all">
           <div className="p-3 bg-brand-accent/10 border border-brand-accent/20 text-brand-accent rounded-xl shadow-glow">

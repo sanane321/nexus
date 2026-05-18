@@ -4,6 +4,7 @@ import { db, SYSTEM_USER_ID } from '../lib/firebase';
 import { Asset } from '../types';
 import { Plus, Database, MapPin, Building2, Package } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Helmet } from 'react-helmet-async';
 
 export function AssetsView() {
   const [assets, setAssets] = useState<Asset[]>([]);
@@ -32,6 +33,10 @@ export function AssetsView() {
 
   return (
     <div className="p-10 max-w-7xl mx-auto space-y-16 bg-transparent h-full transition-colors">
+      <Helmet>
+        <title>Nexus Data Clusters | Industrial Intelligence</title>
+        <meta name="description" content="Explore high-throughput data hierarchy. Active clusters providing real-time telemetry analytics." />
+      </Helmet>
       <div className="flex justify-between items-end">
         <div>
           <h2 className="text-6xl font-bold tracking-tight text-white light:text-slate-900 mb-2 uppercase leading-none transition-colors font-display">Clusters</h2>

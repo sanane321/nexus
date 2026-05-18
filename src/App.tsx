@@ -4,6 +4,7 @@
  */
 
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Dashboard } from './components/Dashboard';
 import { DeviceList } from './components/DeviceList';
 import { AssetsView } from './components/AssetsView';
@@ -72,6 +73,10 @@ export default function App() {
 
   return (
     <div className="h-screen flex bg-brand-bg text-slate-300 relative overflow-hidden font-sans">
+        <Helmet>
+          <title>Nexus IoT | Command & Control</title>
+          <meta name="description" content="Next-generation industrial IoT intelligence platform for high-priority telemetry and asset management." />
+        </Helmet>
       {/* Background Glows */}
       <div className="absolute top-[-15%] left-[-10%] w-[60%] h-[60%] bg-brand-accent/5 light:bg-black/15 blur-[200px] light:blur-[300px] rounded-full pointer-events-none animate-pulse" />
       <div className="absolute bottom-[-15%] right-[-10%] w-[50%] h-[50%] bg-purple-500/5 light:bg-black/10 blur-[200px] light:blur-[300px] rounded-full pointer-events-none" />

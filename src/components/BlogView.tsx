@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Helmet } from 'react-helmet-async';
 import { BookOpen, Calendar, Clock, ArrowRight, Sparkles, User, ArrowLeft, Share2, Bookmark } from 'lucide-react';
 
 interface BlogPost {
@@ -154,6 +155,10 @@ export function BlogView() {
 
   return (
     <div className="p-10 max-w-7xl mx-auto space-y-20 bg-transparent h-full">
+      <Helmet>
+        <title>Nexus Archives | Industrial IoT Blog</title>
+        <meta name="description" content="Deep dives into IoT infrastructure, edge-security protocols, and high-latency industrial intelligence nodes." />
+      </Helmet>
       <header className="space-y-6">
         <div className="flex items-center gap-4">
           <div className="p-3 bg-brand-accent/10 border border-brand-accent/20 text-brand-accent rounded-xl shadow-glow transition-all">

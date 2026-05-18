@@ -5,6 +5,7 @@ import { Device, TelemetryPoint } from '../types';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Activity, AlertCircle, Cpu, Zap, TrendingUp, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Helmet } from 'react-helmet-async';
 
 export function Dashboard() {
   const [devices, setDevices] = useState<Device[]>([]);
@@ -82,6 +83,10 @@ export function Dashboard() {
 
   return (
     <div className="p-10 space-y-12 max-w-7xl mx-auto relative bg-transparent transition-colors">
+      <Helmet>
+        <title>Nexus Command Dash | Real-time Telemetry</title>
+        <meta name="description" content="Monitor your IoT node fleet with sub-second accuracy. Neural logic analysis for industrial optimization." />
+      </Helmet>
       <div className="flex justify-between items-end relative z-10">
         <div>
           <h2 className="text-6xl font-bold tracking-tight text-white light:text-slate-900 mb-2 uppercase leading-none transition-colors font-display">Command Dash</h2>

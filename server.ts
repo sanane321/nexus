@@ -1,5 +1,6 @@
+import fs from "node:fs/promises";
 import express from "express";
-import path from "path";
+import path from "node:path";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
@@ -41,19 +42,49 @@ app.get("/api/health", (req, res) => {
 });
 
 async function start() {
+  let vite: any;
   if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
+    vite = await createViteServer({
       server: { middlewareMode: true },
-      appType: "spa",
+      appType: "custom",
     });
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
+    app.use(express.static(path.join(distPath, "client"), { index: false }));
   }
+
+  app.get("*", async (req, res) => {
+    const url = req.originalUrl;
+
+    try {
+      let template: string;
+      let render: any;
+
+      if (process.env.NODE_ENV !== "production") {
+        template = await fs.readFile(path.resolve(process.cwd(), "index.html"), "utf-8");
+        template = await vite.transformIndexHtml(url, template);
+        render = (await vite.ssrLoadModule("/src/entry-server.tsx")).render;
+      } else {
+        const distPath = path.join(process.cwd(), "dist");
+        template = await fs.readFile(path.resolve(distPath, "client/index.html"), "utf-8");
+        // @ts-ignore
+        render = (await import("./dist/server/entry-server.js")).render;
+      }
+
+      const { html: appHtml, head: headHtml } = render(url);
+      let html = template.replace(`<!--ssr-outlet-->`, appHtml);
+      html = html.replace(`<!--ssr-head-->`, headHtml);
+
+      res.status(200).set({ "Content-Type": "text/html" }).end(html);
+    } catch (e: any) {
+      if (process.env.NODE_ENV !== "production") {
+        vite.ssrFixStacktrace(e);
+      }
+      console.error(e.stack);
+      res.status(500).end(e.stack);
+    }
+  });
 
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${PORT}`);
